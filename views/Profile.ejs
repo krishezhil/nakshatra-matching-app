@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>கந்தன் சேவா சங்கம்</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ <link rel="stylesheet" href="../css/styles.css">
+ <style>
+    /* Additional CSS styles */
+    .form-container {
+        max-width: 100%;
+        margin: auto;
+        padding: 20px;
+    }
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .content {
+        flex: 1;
+    }
+    footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+</style>
+ <style>
+    /* Additional CSS styles */
+    .form-container {
+        max-width: 100%;
+        margin: auto;
+        padding: 20px;
+    }
+</style>
+</head>
+<body style="background-image: url(../img/03-04.jpg);">
+
+<nav class="navbar navbar-expand-md navbar-light">
+  <div class="container">
+    <img src="../img/KandhaLogo.png" style="height:5%;width: 5%;"/><a class="navbar-brand" href="#">கந்தன் சேவா சங்கம்</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="Matrimony">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Profile">Create Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Update-Profile">Update Profile</a>
+          </li>
+        <li class="nav-item">
+          <button id="signoutButton" class="btn btn-danger">Sign Out</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+    <div class="container">
+        <div class="form-container">
+            <h2>Create Profile</h2>
+            <form id="profileForm">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="serial">Serial Number:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="serial" name="serial" required>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="name">Name:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="form-group col-md-2">
+                            <label for="fathername">Father Name:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                            <input type="text" class="form-control" id="fathername" name="fathername" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="mothername">Mother Name:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="mothername" name="mothername" required>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="siblings">Siblings:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="number" class="form-control" id="siblings" name="siblings" required>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="gothiram">Gothiram:</label>
+                    </div>  
+                    <div class="form-group col-md-2">
+                        <input type="text" id="inputGothiram" name="inputGothiram" class="form-control" required pattern="[a-zA-Z\s]+" title="Please enter only alphabets and spaces"></input>
+                        <div class="invalid-feedback">Please enter Gothiram using only alphabets and spaces.</div>
+                        <ul id="suggestions"></ul>
+                    </div>  
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                    <label for="birthdate">Birth Date:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                    <input type="text" class="form-control" id="birthdate" name="birthdate" required>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="birthtime">Birth Time:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="birthtime" name="birthtime" >
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="birthplace">Birth Place:</label></div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="birthplace" name="birthplace" >
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                    <label for="graduation">Graduation:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <select class="form-control" id="graduation" name="graduation" required>
+                            <option value="">Select</option>
+                            <option>School</option>
+                            <option>Diploma</option>
+                            <option>UG</option>
+                            <option>PG</option>
+                            <option>PHD</option>
+                            <option>Doctor</option>
+                            <option>Others</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="QDetails">Qualification Details</label>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <input type="text" class="form-control" id="QDetails" name="QDetails" required>
+                        </div>
+                    <div class="form-group col-md-2">
+                        <label for="job">Job Details:</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="job" name="job" >
+                    </div>
+                    
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="income">Monthly Income:</label>
+                </div>
+                <div class="form-group col-md-2">
+                        <input type="number" class="form-control" id="income" name="income" required>
+                </div>
+                    <div class="form-group col-md-2">
+                        <label for="phno">Contact Number:</label>
+                        </div>
+                        <div class="form-group col-md-2">
+                        <input type="number" class="form-control" id="phno" name="phno" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="gender">Gender:</label>
+                            </div>
+                            <div class="form-group col-md-2">
+                            <select class="form-control" id="gender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                    <label for="dropdown">Natchathiram</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                    <select id="dropdown" name="Natchathiram" class="form-control" required></select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="Region">Region</label>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <select class="form-control" id="region" name="region" required>
+                                <option>Chennai</option>
+                                <option>Others(TN)</option>
+                                <option>Others(IND)</option>
+                                <option>Overseas</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="Aph">Alternate Ph No</label>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <input type="text" class="form-control" id="Aph" name="Aph" >
+                            </div>
+                           
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="address">Address:</label>
+                        </div>
+                        <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="address" name="address" >
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="isRemarried">Is Remarried</label>
+                            <input type="hidden" name="isRemarried" id="isRemarriedHidden">
+                          </div>
+                        <div class="form-group col-md-2">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="isRemarriedToggle">
+                                <label class="custom-control-label" for="isRemarriedToggle"></label>
+                            </div>
+
+                        </div>  
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <footer class="bg-danger text-white text-center py-3 mt-4">
+        <p>கந்தன் சேவா சங்கம் &copy; 2024</p>
+      </footer>
+      
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../js/scripts.js"></script>
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var remarriedToggle = document.getElementById('isRemarriedToggle');
+            var remarriedHidden = document.getElementById('isRemarriedHidden');
+
+            // Function to update the hidden input value based on the checkbox state
+            function updateHiddenInput() {
+                remarriedHidden.value = remarriedToggle.checked ? true : false;
+            }
+
+            // Add event listener to update the hidden input when the checkbox state changes
+            remarriedToggle.addEventListener('change', updateHiddenInput);
+
+            // Initialize the hidden input value based on the initial checkbox state
+            updateHiddenInput();
+        });
+       $(document).ready(function() {
+            fetch('/dropdown', {
+                method: 'GET' 
+                })
+                .then(response => response.json())
+                .then(options => {
+                const dropdown = document.getElementById('dropdown');
+                options.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option.id;
+                    optionElement.text = option.name;
+                    dropdown.add(optionElement);
+                });
+                })
+                .catch(error => console.error('Error fetching:', error));
+
+
+            $('#profileForm').submit(function(e) {
+                e.preventDefault();
+                $('#isRemarriedHidden').val($('#isRemarriedToggle').is(':checked') ? true : false);
+                const formData = {
+                    "serial_no": $('#serial').val(),
+                    "name": $('#name').val(),
+                    "father_name": $('#fathername').val(),
+                    "mother_name": $('#mothername').val(),
+                    "siblings": $('#siblings').val(),
+                    "gothram": $('#inputGothiram').val(),
+                    "birth_date": $('#birthdate').val(),
+                    "birth_time": $('#birthtime').val() ? $('#birthtime').val() : '00:00',
+                    "birth_place": $('#birthplace').val(),
+                    "qualification": $('#graduation').find("option:selected").val(),
+                    "job_details": $('#job').val(),
+                    "monthly_income": $('#income').val(),
+                    "address": $('#address').val(),
+                    "contact_no":$('#phno').val() ,
+                    "gender":$('#gender').find("option:selected").val(),
+                    "is_active": true,
+                    "nakshatraId":$('#dropdown').find("option:selected").val(),
+                    "region":$('#region').find("option:selected").val() ,
+                    "additional_contact_no": $('#Aph').val(), 
+                    "qualification_details": $('#QDetails').val(), 
+                    "is_remarried": $('#isRemarriedHidden').val() , 
+                };
+                console.log(JSON.stringify(formData));
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:3000/api/profile', // Replace with your API endpoint
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        alert('Profile created successfully');
+                        window.location.href = '/Matrimony';
+                        // Optionally, redirect to a new page or perform other actions
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while creating the profile.Toink');
+                    }
+                });
+                window.location.href = '/Matrimony';
+            });
+        });
+
+
+        const textbox = document.getElementById('inputGothiram');
+    const suggestionsList = document.getElementById('suggestions');
+
+    // Function to fetch suggestions from backend
+    const fetchSuggestions = async () => {
+      const userInput = textbox.value;
+      if (!userInput) {
+        suggestionsList.innerHTML = ''; // Clear suggestions if input is empty
+        return;
+      }
+
+      try {
+        const response = await fetch(`/selectGothram?input=${userInput}`);
+        const data = await response.json();
+
+        // Display suggestions
+        suggestionsList.innerHTML = '';
+        data.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item.gothram;
+          li.addEventListener('click', () => selectSuggestion(item.gothram)); // Add click event listener to select suggestion
+          suggestionsList.appendChild(li);
+        });
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+      }
+    };
+
+    // Event listener for textbox input
+    textbox.addEventListener('input', fetchSuggestions);
+
+    // Function to select a suggestion
+    const selectSuggestion = (value) => {
+      textbox.value = value; // Set textbox value to selected suggestion
+      suggestionsList.innerHTML = ''; // Clear suggestions
+    };
+
+    </script>
+</body>
+</html>

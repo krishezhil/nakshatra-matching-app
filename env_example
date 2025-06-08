@@ -1,0 +1,13 @@
+API_HOST=localhost
+API_PORT=3000
+API_SEARCH_URI=/api/getSearchDetails
+API_BASE_URL=http://localhost:3000/api/
+SESSION_SECRET=Test@123
+USER_NAME=admin
+PASSWORD=admin
+DB_NAME=postgres3
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_HOST=localhost
+DB_DIALECT=postgres
+DB_PORT=5432

@@ -1,0 +1,121 @@
+/* styles.css */
+
+    #suggestions {
+      max-height: 100px; /* Limit height of suggestions list */
+      overflow-y: auto; /* Add scrollbar when suggestions exceed max height */
+      border-radius: 5px; /* Add border radius */
+    }
+    .update-profile-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+  }
+    #download-container {
+      top: 70px;
+      right: 0;
+      z-index: 1000; /* Ensure the button appears on top of other elements */
+    }
+      /* CSS for modal overlay */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        z-index: 9999; /* Ensure the overlay is above other content */
+      }
+  
+      /* CSS for loading spinner */
+      .spinner {
+        border: 5px solid #f3f3f3; /* Light grey */
+        border-top: 5px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite; /* Spin animation */
+      }
+  
+      /* Spin animation */
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    #suggestions li {
+      cursor: pointer; /* Change cursor to pointer when hovering over suggestions */
+    }
+
+    #suggestions::-webkit-scrollbar {
+      width: 8px; /* Width of the scrollbar */
+    }
+
+    #suggestions::-webkit-scrollbar-track {
+      background: #f1f1f1; /* Color of the scrollbar track */
+    }
+
+    #suggestions::-webkit-scrollbar-thumb {
+      background: #888; /* Color of the scrollbar thumb */
+      border-radius: 4px; /* Border radius of the scrollbar thumb */
+    }
+
+    #suggestions::-webkit-scrollbar-thumb:hover {
+      background: #555; /* Color of the scrollbar thumb on hover */
+    }
+
+/* Style for the carousel */
+.carousel-item img {
+    height: 400px;
+    object-fit: cover;
+  }
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    font-weight: bold;
+  }
+  
+  .card-footer a {
+    text-decoration: none;
+  }
+  
+  .invalid-feedback {
+    display: none;
+  }
+  
+  .testimonial {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  .testimonial img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  /* Style for the search form */
+  .search-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .carousel-item img {
+    width: 100%;
+    height: auto;
+  }
+  .footer {
+    background-color: #FF5733;
+    color: yellow;
+    padding: 20px 0;
+  }
+  .navbar {
+    background-color: yellow;
+  }
