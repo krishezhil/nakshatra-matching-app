@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - கந்தன் சேவா சங்கம்</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/styles.css">
-  <style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - கந்தன் சேவா சங்கம்</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script src="js/scripts.js"></script>
+    <!-- <style>
     body {
       background-image: url('img/background-image.jpg'); /* Replace 'background-image.jpg' with your actual image path */
       background-size: cover;
@@ -28,42 +32,58 @@
       margin-bottom: 30px;
       color: #333;
     }
-  </style>
-</head>
-<body>
-
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header bg-warning text-center">
-          <h4>கந்தன் சேவா சங்கம்</h4>
-        </div>
-        <div class="card-body">
-          <form id="loginForm">
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" id="username" name="username" class="form-control" required>
-              <div class="invalid-feedback">Please enter your username.</div>
+  </style> -->
+  </head>
+  <body class="login-body">
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-warning text-center">
+              <h4>கந்தன் சேவா சங்கம்</h4>
             </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" name="password" class="form-control" required>
-              <div class="invalid-feedback">Please enter your password.</div>
+            <div class="card-body">
+              <form id="loginForm">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-control"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Please enter your username.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Please enter your password.
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                  Login
+                </button>
+              </form>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
-          </form>
-        </div>
-        <div class="card-footer bg-danger text-center">
-          <p class="text-light" id="lblErrMsg"></p>
+            <div class="card-footer bg-danger text-center">
+              <p class="text-light" id="lblErrMsg"></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<script src="js/scripts.js"></script>
-<script>
+    <!-- <script>
   document.addEventListener('DOMContentLoaded', function() {
   const loginForm = document.getElementById('loginForm');
   
@@ -109,6 +129,6 @@
   }
 });
 
-</script>
-</body>
+</script> -->
+  </body>
 </html>
