@@ -4,170 +4,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>கந்தன் சேவா சங்கம்</title>
+  <title>Find Match</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/styles.css">
-  <style>
-    /* Additional CSS styles */
-    .form-container {
-      max-width: 100%;
-      margin: auto;
-      padding: 20px;
-    }
+  <link rel="stylesheet" href="/css/styles.css">
 
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    .content {
-      flex: 1;
-    }
-  </style>
 </head>
 
-<body>
-
-  <nav class="navbar navbar-expand-md navbar-light">
-    <div class="container">
-      <img src="../img/KandhaLogo.png" style="height:5%;width: 5%;" /><a class="navbar-brand" href="#">கந்தன் சேவா
-        சங்கம்</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="Matrimony">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Profile">Create Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Update-Profile">Update Profile</a>
-          </li>
-          <li class="nav-item">
-            <button id="signoutButton" class="btn btn-danger">Sign Out</button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img class="d-block w-100" src="../img/shankaracharya.jpg" alt="Shankaracharya">
-      </div>
-      <div class="carousel-item">
-        <img class="d-block w-100" src="../img/murugan.jpg" alt="Murugan">
-      </div>
-    </div>
-    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
+<body style="background-image: url(/img/03-04.jpg);">
+  <div class="wrapper d-flex flex-column min-vh-100">
+    <%- include('partials/navbar') %>
 
 
-  <div class="container mt-4">
-    <h2>Search Matching Profiles</h2>
+      <div class="container mt-4">
+        <div class="text-center mt-4 mb-2">
+          <h3>Find Matching Profiles</h3>
+          <small class="text-muted">Find matching for registered male/female profiles</small>
+        </div>
 
-    <form id="myForm" class="needs-validation" novalidate>
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="inputSerialNo">Serial Number</label>
-          <input type="text" id="inputSerialNo" name="inputSerialNo" class="form-control" pattern="[a-zA-Z\s]+"
-            title="Please enter only alphabets and spaces"></input>
-          <div class="invalid-feedback">Please enter Serial Number.</div>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="inputGraduation">Graduation</label>
-          <select id="inputGraduation" name="inputGraduation" class="form-control">
-            <option selected disabled>Choose...</option>
-            <option>School</option>
-            <option>Diploma</option>
-            <option>UG</option>
-            <option>PG</option>
-            <option>PHD</option>
-            <option>Doctor</option>
-            <option>Others</option>
-          </select>
-          <div class="invalid-feedback">Please select a Qualification.</div>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="inputMonSalary">Monthly Salary (Above or Equal to)</label>
-          <input type="text" id="inputMonSalary" name="inputMonSalary" class="form-control"></input>
-          <div class="invalid-feedback">Please enter Salary.</div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="inputGender">Gender</label>
-          <select id="inputGender" name="inputGender" class="form-control" required>
-            <option selected disabled>Choose...</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          <div class="invalid-feedback">Please select a gender.</div>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="inputGothiram">Gothiram</label>
-          <input type="text" id="inputGothiram" name="inputGothiram" class="form-control" required pattern="[a-zA-Z\s]+"
-            title="Please enter only alphabets and spaces"></input>
-          <div class="invalid-feedback">Please enter Gothiram using only alphabets and spaces.</div>
-          <ul id="suggestions"></ul>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="dropdown">Natchathiram</label>
-          <select id="dropdown" name="Natchathiram" class="form-control" required></select>
-          <div class="invalid-feedback">Please select a Natchathiram.</div>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="inputage">Age (Below)</label>
-          <input type="text" id="inputage" name="inputage" class="form-control" required pattern="[0-9]+"
-            title="Please enter a valid age"></input>
-          <div class="invalid-feedback">Please enter a valid age using only numbers.</div>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="region">Region</label>
-          <select class="form-control" id="region" name="region" required>
-            <option value="">Select</option>
-            <option>Chennai</option>
-            <option>Others(TN)</option>
-            <option>Others(IND)</option>
-            <option>Overseas</option>
-          </select>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="isMathimam">Include Mathimam</label>
-          <input type="hidden" name="isMathimam" id="isMathimamHidden">
-          <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="isMathimamToggle" unchecked>
-            <label class="custom-control-label" for="isMathimamToggle"></label>
+        <form id="myForm" class="needs-validation" novalidate>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="inputSerialNo">Serial Number</label>
+              <input type="text" id="inputSerialNo" name="inputSerialNo" class="form-control" pattern="[a-zA-Z\s]+"
+                title="Please enter only alphabets and spaces"></input>
+              <div class="invalid-feedback">Please enter Serial Number.</div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputGraduation">Graduation</label>
+              <select id="inputGraduation" name="inputGraduation" class="form-control">
+                <option selected disabled>Choose...</option>
+                <option>School</option>
+                <option>Diploma</option>
+                <option>UG</option>
+                <option>PG</option>
+                <option>PHD</option>
+                <option>Doctor</option>
+                <option>Others</option>
+              </select>
+              <div class="invalid-feedback">Please select a Qualification.</div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputMonSalary">Monthly Salary (Above or Equal to)</label>
+              <input type="text" id="inputMonSalary" name="inputMonSalary" class="form-control"></input>
+              <div class="invalid-feedback">Please enter Salary.</div>
+            </div>
           </div>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="isRemarried">Include Remarried</label>
-          <input type="hidden" name="isRemarried" id="isRemarriedHidden">
-          <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="isRemarriedToggle" unchecked>
-            <label class="custom-control-label" for="isRemarriedToggle"></label>
-          </div>
-        </div>
-        <!-- <div class="form-group col-md-4">
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="inputGender">Gender</label>
+              <select id="inputGender" name="inputGender" class="form-control" required>
+                <option selected disabled>Choose...</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+              <div class="invalid-feedback">Please select a gender.</div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputGothiram">Gothiram</label>
+              <input type="text" id="inputGothiram" name="inputGothiram" class="form-control" required
+                pattern="[a-zA-Z\s]+" title="Please enter only alphabets and spaces"></input>
+              <div class="invalid-feedback">Please enter Gothiram using only alphabets and spaces.</div>
+              <ul id="suggestions"></ul>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="nakshatraid">Natchathiram</label>
+              <select id="nakshatraid" name="nakshatraid" class="form-control" required></select>
+              <input type="hidden" id="nakshatraidHidden" name="nakshatraid">
+              <div class="invalid-feedback">Please select a Natchathiram.</div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="inputage">Age (Below)</label>
+              <input type="text" id="inputage" name="inputage" class="form-control" required pattern="[0-9]+"
+                title="Please enter a valid age"></input>
+              <div class="invalid-feedback">Please enter a valid age using only numbers.</div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="region">Region</label>
+              <select class="form-control" id="region" name="region" required>
+                <option value="">Select</option>
+                <option>Chennai</option>
+                <option>Others(TN)</option>
+                <option>Others(IND)</option>
+                <option>Overseas</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="isMathimam">Include Mathimam</label>
+              <input type="hidden" name="isMathimam" id="isMathimamHidden">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="isMathimamToggle" unchecked>
+                <label class="custom-control-label" for="isMathimamToggle"></label>
+              </div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="isRemarried">Include Remarried</label>
+              <input type="hidden" name="isRemarried" id="isRemarriedHidden">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="isRemarriedToggle" unchecked>
+                <label class="custom-control-label" for="isRemarriedToggle"></label>
+              </div>
+            </div>
+            <!-- <div class="form-group col-md-4">
           <label for="inputsiblings">Siblings</label>
           <input type="text" id="inputsiblings" name="inputsiblings" class="form-control" required pattern="[0-9]+"
             title="Please enter a valid number"></input>
@@ -179,21 +116,22 @@
             title="Please enter only alphabets and spaces"></input>
           <div class="invalid-feedback">Please enter Place using only alphabets and spaces.</div>
         </div> -->
+          </div>
+          <div class="form-row">
+          </div>
+          <button id="submitButton" type="button" class="btn btn-primary">Search</button>
+        </form>
       </div>
-      <div class="form-row">
-      </div>
-      <button id="submitButton" type="submit" class="btn btn-primary">Search</button>
-    </form>
+
+      <%- include('partials/footer') %>
   </div>
 
-  <footer class="bg-danger text-white text-center py-3 mt-4">
-    <p>கந்தன் சேவா சங்கம் &copy; 2024</p>
-  </footer>
+  <script src="/js/scripts.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="../js/scripts.js"></script>
+
   <script>
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -219,63 +157,64 @@
 
 
 
-    // Function to fetch suggestions from backend
-    const fetchSuggestions = async () => {
-      const userInput = textbox.value;
-      if (!userInput) {
-        suggestionsList.innerHTML = ''; // Clear suggestions if input is empty
-        return;
-      }
+      // Function to fetch suggestions from backend
+      const fetchSuggestions = async () => {
+        const userInput = textbox.value;
+        if (!userInput) {
+          suggestionsList.innerHTML = ''; // Clear suggestions if input is empty
+          return;
+        }
 
-      try {
-        const response = await fetch(`/selectGothram?input=${userInput}`);
-        const data = await response.json();
+        try {
+          const response = await fetch(`/fetchAvailableGothrams?input=${userInput}`);
+          const data = await response.json();
 
-        // Display suggestions
-        suggestionsList.innerHTML = '';
-        data.forEach(item => {
-          const li = document.createElement('li');
-          li.textContent = item.gothram;
-          li.addEventListener('click', () => selectSuggestion(item.gothram)); // Add click event listener to select suggestion
-          suggestionsList.appendChild(li);
-        });
-      } catch (error) {
-        console.error('Error fetching suggestions:', error);
-      }
-    };
-
-
-
-    // Event listener for textbox input
-    textbox.addEventListener('input', fetchSuggestions);
-
-    // Function to select a suggestion
-    const selectSuggestion = (value) => {
-      textbox.value = value; // Set textbox value to selected suggestion
-      suggestionsList.innerHTML = ''; // Clear suggestions
-    };
+          // Display suggestions
+          suggestionsList.innerHTML = '';
+          data.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item.gothram;
+            li.addEventListener('click', () => selectSuggestion(item.gothram)); // Add click event listener to select suggestion
+            suggestionsList.appendChild(li);
+          });
+        } catch (error) {
+          console.error('Error fetching suggestions:', error);
+        }
+      };
 
 
 
-    // Fetch dropdown options and populate the dropdown
-    fetch('/dropdown', {
-      method: 'GET'
-    })
-      .then(response => response.json())
-      .then(options => {
-        const dropdown = document.getElementById('dropdown');
-        options.forEach(option => {
-          const optionElement = document.createElement('option');
-          optionElement.value = option.id;
-          optionElement.text = option.name;
-          dropdown.add(optionElement);
-        });
+      // Event listener for textbox input
+      textbox.addEventListener('input', fetchSuggestions);
+
+      // Function to select a suggestion
+      const selectSuggestion = (value) => {
+        textbox.value = value; // Set textbox value to selected suggestion
+        suggestionsList.innerHTML = ''; // Clear suggestions
+      };
+
+
+
+      // Fetch dropdown options and populate the dropdown
+      fetch('/dropdown', {
+        method: 'GET'
       })
-      .catch(error => console.error('Error fetching:', error));
+        .then(response => response.json())
+        .then(options => {
+          const nakshatraid = document.getElementById('nakshatraid');
+          options.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.id;
+            optionElement.text = option.name;
+            nakshatraid.add(optionElement);
+          });
+        })
+        .catch(error => console.error('Error fetching:', error));
     });
 
-    
+
   </script>
+
 </body>
 
 </html>

@@ -209,3 +209,79 @@ footer {
   margin-bottom: 20px;
   /* Add margin bottom to create gap between profile cards */
 }
+
+/* Main datepicker background */
+.ui-datepicker {
+  background: #e6f4ff;
+  border: 1px solid #99c2ff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Header (month & year area) */
+.ui-datepicker-header {
+  background: #3399ff;
+  color: white;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  padding: 5px;
+}
+
+/* Title text (month + year) */
+.ui-datepicker-title {
+  font-weight: bold;
+}
+
+/* Date cells default */
+.ui-datepicker td a {
+  background: #ffffff;
+  color: #003366;
+  border-radius: 3px;
+  padding: 3px 6px;
+  text-align: center;
+  text-decoration: none;
+}
+
+/* Hover effect */
+.ui-datepicker td a:hover {
+  background: #cce6ff;
+  color: #000;
+}
+
+/* Active selected date */
+.ui-datepicker td .ui-state-active {
+  background: #66b3ff !important;
+  color: white !important;
+}
+
+/* Today highlight */
+.ui-datepicker .ui-state-highlight {
+  background: #b3d9ff !important;
+  color: #003366 !important;
+}
+
+/* Disabled dates */
+.ui-datepicker td .ui-state-disabled {
+  color: #cccccc !important;
+  pointer-events: none;
+}
+
+.nav-link {
+  min-width: 140px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.nav-link.active {
+  background-color: #0056b3;
+  color: #fff !important;
+  border-radius: 4px;
+}
+
+#signoutButton {
+  min-width: 120px;
+  white-space: nowrap;
+}

@@ -1,4 +1,5 @@
 const ExcelJS = require('exceljs');
+const logger = require("../app/utils/logger");
 
 exports.generateExcel = async (profilesData) => {
   const workbook = new ExcelJS.Workbook();

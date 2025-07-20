@@ -1,197 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>கந்தன் சேவா சங்கம்</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="/css/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/he/1.2.0/he.js"></script>
-  <style>
-    /* Additional CSS styles */
-    .form-container {
-        max-width: 100%;
-        margin: auto;
-        padding: 20px;
-    }
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-    .wrapper {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-    .content {
-        flex: 1;
-    }
-</style>
-  <style>
-    .profile-card {
-      margin-bottom: 20px; /* Add margin bottom to create gap between profile cards */
-    }
-  </style>
 </head>
-<body style="background-image: url(../img/Matrimony.jpg);">
 
-  <nav class="navbar navbar-expand-md navbar-light">
-    <div class="container">
-      <img src="../img/KandhaLogo.png" style="height:5%;width: 5%;"/><a class="navbar-brand" href="#">கந்தன் சேவா சங்கம்</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="Matrimony">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Profile">Create Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Update-Profile">Update Profile</a>
-          </li>
-          <li class="nav-item">
-            <button id="signoutButton" class="btn btn-danger">Sign Out</button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+<body style="background-image: url(/img/03-04.jpg);">
+  <div class="wrapper d-flex flex-column min-vh-100">
+    <!-- style="background-image: url(../img/Matrimony.jpg);" -->
+    <%- include('partials/navbar') %>
+      
 
-  <div class="container mt-4">
-    <h2>Matching Profiles</h2>
-    <div class="row" id="profiles">
-      <!-- Profile cards will be dynamically added here -->
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <% profiles.forEach(profile => { %>
-        <div class="col-lg-4 col-md-6">
-          <div class="card profile-card">
-            <div class="card-body">
-              <h3 class="card-title"><%= profile.name %></h3>
-              <p class="card-text"><b>Serial Number:</b> <%= profile.serial_no %></p>
-              <p class="card-text"><b>Uthamam:</b> <%= profile.uthamam_porutham ? profile.uthamam_porutham : 'NA' %></p>
-              <p class="card-text"><b>Mathimam:</b> <%= profile.mathimam_porutham ? profile.mathimam_porutham : 'NA' %></p>
-              <p class="card-text"><b>Gothram:</b> <%= profile.gothram %></p>
-              <p class="card-text"><b>Father Name:</b> <%= profile.father_name %></p>
-              <p class="card-text"><b>Mother Name:</b> <%= profile.mother_name %></p>
-              <p class="card-text"><b>Siblings:</b> <%= profile.siblings %></p>
-              <p class="card-text"><b>Graduation:</b> <%= profile.qualification %></p>
-              <p class="card-text"><b>Qualification Details:</b> <%= profile.qualification_details %></p>
-              <p class="card-text"><b>Monthly Income:</b> <%= profile.monthly_income %></p>
-              <p class="card-text"><b>Birth Place:</b> <%= profile.birth_place %></p>
-              <p class="card-text"><b>Address:</b> <%= profile.address %></p>
-            </div>
-          </div>
+      <div class="container mt-4">
+        <h2>Matching Profiles</h2>
+        <div class="row" id="profiles">
+          <!-- Profile cards will be dynamically added here -->
         </div>
-      <% }); %>
-    </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <% profiles.forEach(profile=> { %>
+            <div class="col-lg-4 col-md-6">
+              <div class="card profile-card">
+                <div class="card-body">
+                  <h3 class="card-title">
+                    <%= profile.name %>
+                  </h3>
+                  <p class="card-text"><b>Serial Number:</b>
+                    <%= profile.serial_no %>
+                  </p>
+                  <p class="card-text"><b>Uthamam:</b>
+                    <%= profile.uthamam_porutham ? profile.uthamam_porutham : 'NA' %>
+                  </p>
+                  <p class="card-text"><b>Mathimam:</b>
+                    <%= profile.mathimam_porutham ? profile.mathimam_porutham : 'NA' %>
+                  </p>
+                  <p class="card-text"><b>Gothram:</b>
+                    <%= profile.gothram %>
+                  </p>
+                  <p class="card-text"><b>Father Name:</b>
+                    <%= profile.father_name %>
+                  </p>
+                  <p class="card-text"><b>Mother Name:</b>
+                    <%= profile.mother_name %>
+                  </p>
+                  <p class="card-text"><b>Siblings:</b>
+                    <%= profile.siblings %>
+                  </p>
+                  <p class="card-text"><b>Graduation:</b>
+                    <%= profile.qualification %>
+                  </p>
+                  <p class="card-text"><b>Qualification Details:</b>
+                    <%= profile.qualification_details %>
+                  </p>
+                  <p class="card-text"><b>Monthly Income:</b>
+                    <%= profile.monthly_income %>
+                  </p>
+                  <p class="card-text"><b>Birth Place:</b>
+                    <%= profile.birth_place %>
+                  </p>
+                  <p class="card-text"><b>Address:</b>
+                    <%= profile.address %>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+        </div>
+      </div>
+
+      <!-- <div class="container">
+      <div class="row">
+
+      </div> -->
   </div>
-  
+
   <!-- Download all profiles button -->
-  <div id="download-container" class="d-flex justify-content-end mt-3 mr-3">
+  <div id="download-container" class="d-flex justify-content-end mt-3 mb-4 mr-3">
     <!-- Modal overlay with loading spinner -->
     <div id="overlay" class="overlay">
-        <div class="spinner"></div>
+      <div class="spinner"></div>
     </div>
-    <button id="back-btn" class="btn btn-primary">Back</button>
-    <button id="download-pdf-btn" class="btn btn-danger">Download PDF</button>
+    <button id="back-btn" class="btn btn-warning">Back</button>
+    <button id="download-pdf-btn" class="btn btn-info ml-2">Download PDF</button>
     <button id="download-excel-btn" class="btn btn-success ml-2">Download Excel</button>
   </div>
-  <div class="container">
-    <div class="row">
-  
-</div>
-</div>
+  <%- include('partials/footer') %>
 
-  <footer class="bg-danger text-white text-center py-3 mt-4">
-    <p>கந்தன் சேவா சங்கம் &copy; 2024</p>
-  </footer>
+  </div>
 
   <!-- Include jQuery and Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
- 
+
   <script>
 
-      const signoutButton = document.getElementById('signoutButton');
-      signoutButton.addEventListener('click', function() {
-        signout();
-      });
+    const signoutButton = document.getElementById('signoutButton');
+    signoutButton.addEventListener('click', function () {
+      signout();
+    });
 
-      function signout() {
-        // Here, you can clear the authentication token or session
-        // For example, if you're using local storage for storing the token
-        //localStorage.removeItem('token');
-        // Redirect the user to the login page
-        window.location.href = '/Login.html';
-      }
+    function signout() {
+      // Here, you can clear the authentication token or session
+      // For example, if you're using local storage for storing the token
+      //localStorage.removeItem('token');
+      // Redirect the user to the login page
+      window.location.href = '/Login.html';
+    }
 
-      $('#download-excel-btn').click(function() {
-        const overlay = document.getElementById('overlay');
-        overlay.style.display = 'flex';
+    $('#download-excel-btn').click(function () {
+      const overlay = document.getElementById('overlay');
+      overlay.style.display = 'flex';
 
-        // Send a fetch request to the server to generate the Excel file
-        fetch('/generate-excel')
-          .then(response => response.blob())
-          .then(blob => {
-            // Create a download link
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'profiles.xlsx'; // Set the filename here
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            overlay.style.display = 'none';
-          })
-          .catch(error => {
-            overlay.style.display = 'none';
-            console.error('Error generating Excel:', error);
-          });
-      });
-
-      $('#download-pdf-btn').click(function() {
-    const loadingSpinner = document.getElementById('loading-spinner');
-    overlay.style.display = 'flex';
-
-     // Send a fetch request to the server to generate the PDF
-     fetch('/generate-pdf')
+      // Send a fetch request to the server to generate the Excel file
+      fetch('/generate-excel')
         .then(response => response.blob())
         .then(blob => {
-            // Create a download link
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'profiles.pdf'; // Set the filename here
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            overlay.style.display = 'none';
+          // Create a download link
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'profiles.xlsx'; // Set the filename here
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          overlay.style.display = 'none';
         })
         .catch(error => {
-            overlay.style.display = 'none';
-            console.error('Error generating PDF:', error);
+          overlay.style.display = 'none';
+          console.error('Error generating Excel:', error);
+        });
+    });
+
+    $('#download-pdf-btn').click(function () {
+      const loadingSpinner = document.getElementById('loading-spinner');
+      overlay.style.display = 'flex';
+
+      // Send a fetch request to the server to generate the PDF
+      fetch('/generate-pdf')
+        .then(response => response.blob())
+        .then(blob => {
+          // Create a download link
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'profiles.pdf'; // Set the filename here
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          overlay.style.display = 'none';
+        })
+        .catch(error => {
+          overlay.style.display = 'none';
+          console.error('Error generating PDF:', error);
         });
 
-      });
+    });
 
-      
 
-      $('#back-btn').click(function() {
-        window.location.href = '/Matrimony';
-        });
+
+    $('#back-btn').click(function () {
+      window.location.href = '/Matrimony';
+    });
 
   </script>
 
 
 </body>
+
 </html>

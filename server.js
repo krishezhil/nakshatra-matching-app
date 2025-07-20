@@ -44,6 +44,7 @@ app.use(
     secret: process.env.SESSION_SECRET || "fallbackSecret", //TODO: Change this to a secure random string
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: false } // true only if using HTTPS
   })
 );
 

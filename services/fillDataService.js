@@ -1,9 +1,11 @@
 // services/dataService.js
 // const fetch = require('node-fetch');
 const dotenv = require('dotenv');
+const logger = require("../app/utils/logger");
 
 // Load environment variables from .env file
 dotenv.config();
+
 
 exports.fetchProfileData = async (serialNo) => {
   try {
@@ -30,11 +32,11 @@ exports.fetchProfileData = async (serialNo) => {
     return processedData;
   } catch (error) {
     if (error.name === 'FetchError') {
-      console.error('Network error occurred:', error);
+      logger.error(`Network error occurred:  ${error.message}`);
     } else if (error.name === 'SyntaxError') {
-      console.error('Response is not valid JSON:', error);
+      logger.error(`Response is not valid JSON:  ${error}`);
     } else {
-      console.error('Unexpected error:', error);
+      logger.error(`Unexpected error:  ${error}`);
     }
     throw error; // Re-throw the error after logging it
   }

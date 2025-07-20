@@ -1,9 +1,19 @@
 // services/pdfService.js
 const puppeteer = require('puppeteer');
+const logger = require("../app/utils/logger");
 
 exports.generatePDF = async (profilesData) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+
+  logger.info("Generating PDF with Puppeteer...");
+  if (!profilesData || profilesData.length === 0) {
+    logger.warn("No profiles data provided for PDF generation.");
+    return Buffer.from(''); // Return empty buffer if no data
+  }
+  logger.info(`Profiles data length: ${profilesData.length}`);
+  // Log the first profile for debugging
+  logger.info(`First profile data: ${JSON.stringify(profilesData[0])}`);
 
   // Construct HTML content dynamically based on profiles data
   let htmlContent = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Profiles</title></head><body>';

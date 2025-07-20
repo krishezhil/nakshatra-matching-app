@@ -20,7 +20,7 @@ router.get(
 
 router.get("/searchProfile", profileController.searchProfile);
 router.post("/update-profile/:id", profileController.updateProfileById);
-router.get(
+router.post(
   "/searchMatchingProfiles",
   isAuthenticated,
   profileController.searchMatchingProfiles
@@ -30,6 +30,8 @@ router.get(
   isAuthenticated,
   profileController.renderShortlistedProfiles
 );
+
+
 
 
 // Fetch profile details route

@@ -67,74 +67,127 @@ exports.updateProfileById = async (req, res) => {
 
 exports.searchMatchingProfiles = async (req, res) => {
   try {
-    const {
-      inputSerialNo,
-      inputGender,
-      inputGothiram,
-      Natchathiram,
-      inputage,
-      inputsiblings,
-      inputplace,
-      inputGraduation,
-      inputMonSalary,
-      region,
-      isMathimam,
-      isRemarried,
-    } = req.query;
+    // Prefer body, fallback to query
+    const getParam = (key, defaultValue = "") =>
+      req.body?.[key] ?? req.query?.[key] ?? defaultValue;
 
-    let responseSearch = null;
+    const inputSerialNo = getParam("inputSerialNo");
+    let inputGender = getParam("inputGender");
+    let inputGothiram = getParam("inputGothiram");
+    let nakshatraid = getParam("nakshatraid");
+    let rasi_lagnam = getParam("rasi_lagnam");
+    let navamsam_lagnam = getParam("navamsam_lagnam");
+
+    const inputage = getParam("inputage", "35");
+    const inputsiblings = getParam("inputsiblings");
+    const inputplace = getParam("inputplace");
+    const inputGraduation = getParam("inputGraduation");
+    const inputMonSalary = getParam("inputMonSalary");
+    const region = getParam("region");
+    const isMathimam =
+      getParam("isMathimam") === "Y" || getParam("isMathimam") === true;
+    const isRemarried =
+      getParam("isRemarried") === "Y" || getParam("isRemarried") === true;
 
     if (inputSerialNo) {
-      responseSearch = await profileService.getProfileDetails(inputSerialNo);
+      const responseSearch = await profileService.getProfileDetails(
+        inputSerialNo
+      );
+      logger.info(
+        `Response from getProfileDetails: ${JSON.stringify(responseSearch)}`
+      );
 
-      if (responseSearch && responseSearch.length > 0) {
-        const profile = responseSearch[0];
-        req.query.inputGender = profile.gender;
-        req.query.inputGothiram = profile.gothram;
-        req.query.Natchathiram = profile.nakshatram;
+      const profileList = responseSearch?.data?.data;
+
+      if (
+        responseSearch.success &&
+        Array.isArray(profileList) &&
+        profileList.length > 0
+      ) {
+        const profile = profileList[0];
+        inputGender = profile.gender;
+        inputGothiram = profile.gothram;
+        nakshatraid = profile.nakshatraid;
+        rasi_lagnam = profile.rasi_lagnam || "";
+        navamsam_lagnam = profile.navamsam_lagnam || "";
+      } else {
+        logger.info(`No profile found for serial number: ${inputSerialNo}`);
       }
     }
 
-    logger.info("natchatiram " + req.query.Natchathiram);
-    logger.info("inputGothiram " + req.query.inputGothiram);
-    logger.info("inputGender " + req.query.inputGender);
+    logger.info("Final Matching Params:");
+    logger.info("Gender: " + inputGender);
+    logger.info("Gothram: " + inputGothiram);
+    logger.info("Nakshatra: " + nakshatraid);
+    logger.info("Rasi Lagnam: " + rasi_lagnam);
+    logger.info("Navamsam Lagnam: " + navamsam_lagnam);
+    logger.info("Age: " + inputage);
+    logger.info("Siblings: " + inputsiblings);
+    logger.info("Place: " + inputplace);
+    logger.info("Qualification: " + inputGraduation);
+    logger.info("Monthly Salary: " + inputMonSalary);
+    logger.info("Region: " + region);
+    logger.info("Is Mathimam: " + isMathimam);
+    logger.info("Is Remarried: " + isRemarried);
 
     const queryParams = {
-      nakshatraid: req.query.Natchathiram,
+      nakshatraid,
       includeMathimam: isMathimam ? "Y" : "N",
-      gothram: req.query.inputGothiram,
-      age: req.query.inputage || "35",
-      siblings: req.query.inputsiblings || "",
-      place: req.query.inputplace || "",
-      serial_no: req.query.inputSerialNo || "",
-      qualification: req.query.inputGraduation || "",
-      monthsalary: req.query.inputMonSalary || "",
-      region: req.query.region || "",
-      isMathimam: req.query.isMathimam ? "Y" : "N",
-      isRemarried: req.query.isRemarried ? "Y" : "N",
+      gothram: inputGothiram,
+      age: inputage,
+      siblings: inputsiblings,
+      place: inputplace,
+      serial_no: inputSerialNo,
+      qualification: inputGraduation,
+      monthsalary: inputMonSalary,
+      region,
+      isMathimam: isMathimam ? "Y" : "N",
+      isRemarried: isRemarried ? "Y" : "N",
+      rasi_lagnam,
+      navamsam_lagnam,
     };
 
-    logger.info("query params isremarried " + queryParams.isRemarried);
-    logger.info("query params age " + queryParams.age);
-    logger.info("query params " + JSON.stringify(queryParams));
-    const profiles = await profileService.findMatchingProfiles(
-      queryParams,
-      req.query.inputGender
+    logger.info(
+      "Calling profileService.findMatchingProfiles with:",
+      queryParams
     );
 
+    const profiles = await profileService.findMatchingProfiles(
+      queryParams,
+      inputGender
+    );
+
+    logger.info("Profiles lentgh: " + profiles.length);
     req.session.profiles = profiles;
-    res.json(profiles);
+
+    //     req.session.profiles = {
+    //   serial_no: inputSerialNo,
+    //   data: profiles
+    // };
+
+    res.json({
+      success: true,
+      data: profiles,
+      message:
+        profiles.length === 0 ? "No matching profiles found" : "Profiles found",
+    });
   } catch (error) {
     logger.error("Error fetching data:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
 exports.renderShortlistedProfiles = (req, res) => {
   try {
-    const profiles = req.session.profiles;
+    const profilesWrapper = req.session.profiles; // this is an object like { data: [...] }
+    const profiles = profilesWrapper?.data || [];
 
-    if (profiles && profiles.length > 0) {
+    logger.info(
+      `Session data in shortlistedprofiles: ${JSON.stringify(req.session)}`
+    );
+    logger.info(`First profile in session: ${JSON.stringify(profiles[0])}`);
+
+    if (profiles.length > 0) {
       res.render("shortlistedprofiles", { profiles });
     } else {
       res.render("noDataFound");
@@ -144,6 +197,23 @@ exports.renderShortlistedProfiles = (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+// exports.renderShortlistedProfiles = (req, res) => {
+//   try {
+//     const profiles = req.session.profiles;
+//     logger.info(`Session data in shortlistedprofiles: ${req.session}`);
+//     logger.info(`Profiles in session: ${JSON.stringify(profiles.data[0])}`);
+
+//     if (profiles && profiles.length > 0) {
+//       res.render("shortlistedprofiles", { profiles });
+//     } else {
+//       res.render("noDataFound");
+//     }
+//   } catch (error) {
+//     logger.error("Error rendering page:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
 
 const nakshatra = Object.freeze({
   1: "one",
@@ -204,11 +274,18 @@ exports.findMatchingFemale = async (req, res, next) => {
     const includePlace = req.query.place;
     const region = req.query.region;
     const isRemarried = req.query.isRemarried;
+    const maleRasiLagnam = req.query.rasi_lagnam || "";
+    const maleNavasamLagnam = req.query.navamsam_lagnam || "";
+    logger.info(`Male Rasi Lagnam: ${maleRasiLagnam}`);
+    logger.info(`Male Navasam Lagnam: ${maleNavasamLagnam}`);
+    logger.info(`NakshId: ${nakshId}`);
+    logger.debug(`Received query params: ${req.query}`);
 
     if (!nakshatra[nakshId]) {
       return res.status(400).json({ error: "Invalid nakshatra ID" });
     }
     const searchNakshtraColumn = nakshatra[nakshId];
+    logger.info(`searchNakshtraColumn: ${searchNakshtraColumn}`);
 
     // Build dynamic WHERE conditions with params
     let conditions = [];
@@ -219,10 +296,10 @@ exports.findMatchingFemale = async (req, res, next) => {
     // (You can keep this inline since it's complex, but parameters are mostly user inputs)
     const nakshatraCondition =
       includeMathimam === "Y"
-        ? `"nakshatraId" IN (SELECT nakshatra_no FROM male_matching_uthamam WHERE ${searchNakshtraColumn} <> 0
+        ? `nakshatraid IN (SELECT nakshatra_no FROM male_matching_uthamam WHERE ${searchNakshtraColumn} <> 0
           UNION ALL
           SELECT nakshatra_no FROM male_matching_mathimam WHERE ${searchNakshtraColumn} <> 0)`
-        : `"nakshatraId" IN (SELECT nakshatra_no FROM male_matching_uthamam WHERE ${searchNakshtraColumn} <> 0)`;
+        : `nakshatraid IN (SELECT nakshatra_no FROM male_matching_uthamam WHERE ${searchNakshtraColumn} <> 0)`;
 
     logger.info(`Searching for nakshatra: ${searchNakshtraColumn}`);
     logger.info(`${nakshId} Nakshatra Condition: ${nakshatraCondition}`);
@@ -325,7 +402,9 @@ exports.findMatchingFemale = async (req, res, next) => {
       profiles.additional_contact_no,
       profiles.region,
       profiles.qualification_details,
-      profiles.birth_place
+      profiles.birth_place,
+      profiles.rasi_lagnam,
+      profiles.navamsam_lagnam
     `;
 
     let joinClause = `FROM profiles`;
@@ -338,8 +417,8 @@ exports.findMatchingFemale = async (req, res, next) => {
       `;
 
       joinClause += `
-        INNER JOIN male_matching_uthamam ON male_matching_uthamam.nakshatra_no = profiles."nakshatraId"
-        INNER JOIN male_matching_mathimam ON male_matching_mathimam.nakshatra_no = profiles."nakshatraId"
+        INNER JOIN male_matching_uthamam ON male_matching_uthamam.nakshatra_no = profiles.nakshatraid
+        INNER JOIN male_matching_mathimam ON male_matching_mathimam.nakshatra_no = profiles.nakshatraid
       `;
     } else {
       selectClause = `
@@ -348,7 +427,7 @@ exports.findMatchingFemale = async (req, res, next) => {
       `;
 
       joinClause += `
-        INNER JOIN male_matching_uthamam ON male_matching_uthamam.nakshatra_no = profiles."nakshatraId"
+        INNER JOIN male_matching_uthamam ON male_matching_uthamam.nakshatra_no = profiles.nakshatraid
       `;
     }
 
@@ -363,16 +442,100 @@ exports.findMatchingFemale = async (req, res, next) => {
     logger.info(`Values:  ${values}`);
 
     const results = await pool.query(finalQuery, values);
-    const filteredResults = results.rows.filter(
-      (item) => item.is_active === true
-    );
+    logger.info(`Results: ${JSON.stringify(results.rows)}`);
+    const filteredResults = results.rows.filter((item) => {
+      if (!item.is_active) return false;
 
+      const female_rasi_lagnam = item.rasi_lagnam || ""; // Replace with actual column name
+      // const femaleD = item.navamsam_lagnam || ""; // Replace with actual column name
+
+      logger.info(`Male Rasi Lagnam: ${maleRasiLagnam}`);
+      // logger.info(`Male Navasam Lagnam: ${maleNavasamLagnam}`);
+      logger.info(`Female Rasi Lagnam: ${female_rasi_lagnam}`);
+      // logger.info(`Female D: ${femaleD}`);
+
+      check = checkSingleCompatibility(maleRasiLagnam, female_rasi_lagnam);
+      logger.info(`Compatibility Check: ${check}`);
+      return check;
+    });
+    logger.info(`Filtered Results: ${JSON.stringify(filteredResults)}`);
     res.json(filteredResults);
   } catch (error) {
     logger.error(`Error in findMatchingFemale: ${error}`);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+function checkSingleCompatibility(maleVal, femaleVal) {
+  const toSet = (val) => new Set(val.split("/").map((v) => v.trim()));
+  const isOnly = (set, val) => set.size === 1 && set.has(val);
+  const intersects = (set1, set2) => [...set1].some((v) => set2.has(v));
+
+  const riskItems = new Set(["Sani", "Sevai", "Kethu", "Raghu"]);
+
+  const maleSet = toSet(maleVal);
+  const femaleSet = toSet(femaleVal);
+
+  // Rule 1: If male is only Suth, female must also be only Suth
+  if (isOnly(maleSet, "Suth")) {
+    return isOnly(femaleSet, "Suth");
+  }
+
+  // Rule 2: For risk items, female must have at least one of male's risk items
+  const maleRisks = new Set([...maleSet].filter((item) => riskItems.has(item)));
+  const femaleRisks = new Set(
+    [...femaleSet].filter((item) => riskItems.has(item))
+  );
+
+  return intersects(maleRisks, femaleRisks);
+}
+
+function checkCompatibility(maleA, maleB, femaleC, femaleD) {
+  const toSet = (val) => new Set(val.split("/").map((v) => v.trim()));
+
+  const maleSet = new Set([...toSet(maleA), ...toSet(maleB)]);
+  const femaleSet = new Set([...toSet(femaleC), ...toSet(femaleD)]);
+
+  const isOnly = (set, val) => set.size === 1 && set.has(val);
+  const intersects = (set1, set2) => [...set1].some((v) => set2.has(v));
+
+  const riskItems = new Set(["Sani", "Sevai", "Kethu", "Raghu"]);
+
+  // Rule 1: Suth-only check
+  if (isOnly(maleSet, "Suth")) {
+    const cOnlySuth = isOnly(toSet(femaleC), "Suth");
+    const dOnlySuth = isOnly(toSet(femaleD), "Suth");
+    if (!cOnlySuth || !dOnlySuth) {
+      logger.info(
+        "Mismatch: Male is only Suth, but female contains non-Suth value(s)."
+      );
+      return false;
+    }
+    return true;
+  }
+
+  // Rule 2: Risk item overlap
+  const maleRisks = new Set([...maleSet].filter((item) => riskItems.has(item)));
+  const femaleRisks = new Set(
+    [...femaleSet].filter((item) => riskItems.has(item))
+  );
+
+  if (maleRisks.size === 0) {
+    logger.info(
+      "No risk items present in male side. Defaulting to false (unexpected case)."
+    );
+    return false;
+  }
+
+  if (!intersects(maleRisks, femaleRisks)) {
+    logger.info("Mismatch: Female is missing matching risk item(s).");
+    logger.info("Male risk items:", [...maleRisks].join(", "));
+    logger.info("Female risk items:", [...femaleRisks].join(", "));
+    return false;
+  }
+
+  return true;
+}
 
 /**
  * Find matching male profiles based on search criteria.
@@ -393,13 +556,17 @@ exports.findMatchingMale = async (req, res, next) => {
     const includeplace = req.query.place;
     const includeage = req.query.age;
     const isRemarried = req.query.isRemarried === "Y";
+    const femaleRasiLagnam = req.query.rasi_lagnam || "";
+    logger.info(`Female Rasi Lagnam: ${femaleRasiLagnam}`);
+    logger.info(`NakshId: ${nakshId}`);
+    logger.info(`Received query params: ${req.query}`);
 
     if (!nakshatra[nakshId]) {
       return res.status(400).json({ error: "Invalid nakshatra ID" });
     }
 
     const searchNakshtraColumn = nakshatra[nakshId];
-    logger.info(`Searching for nakshatra: ${searchNakshtraColumn}`);
+    logger.info(`Searching for nakshatra column: ${searchNakshtraColumn}`);
     logger.info(`Request Gothram: ${reqGothram}`);
     logger.info(`Include Mathimam: ${includeMathimam}`);
     logger.info(`Include Age: ${includeage}`);
@@ -467,7 +634,7 @@ exports.findMatchingMale = async (req, res, next) => {
     const baseFields = `
       profiles.serial_no, profiles.name, profiles.father_name, profiles.mother_name, profiles.siblings, profiles.gothram, 
       profiles.qualification, profiles.job_details, profiles.monthly_income, profiles.address, profiles.contact_no, profiles.gender, 
-      profiles.is_active, profiles.additional_contact_no, profiles.region, profiles.qualification_details, profiles.birth_place
+      profiles.is_active, profiles.additional_contact_no, profiles.region, profiles.qualification_details, profiles.birth_place,profiles.rasi_lagnam
     `;
 
     let query = "";
@@ -481,10 +648,10 @@ exports.findMatchingMale = async (req, res, next) => {
           female_matching_mathimam.${searchNakshtraColumn} AS mathimam_porutham,
           ${baseFields}
         FROM profiles
-        INNER JOIN female_matching_uthamam ON female_matching_uthamam.nakshatra_no = profiles."nakshatraId"
-        INNER JOIN female_matching_mathimam ON female_matching_mathimam.nakshatra_no = profiles."nakshatraId"
+        INNER JOIN female_matching_uthamam ON female_matching_uthamam.nakshatra_no = profiles.nakshatraid
+        INNER JOIN female_matching_mathimam ON female_matching_mathimam.nakshatra_no = profiles.nakshatraid
         ${whereClause}
-        AND profiles."nakshatraId" IN (
+        AND profiles.nakshatraid IN (
           SELECT nakshatra_no FROM female_matching_uthamam WHERE ${searchNakshtraColumn} <> 0
           UNION ALL
           SELECT nakshatra_no FROM female_matching_mathimam WHERE ${searchNakshtraColumn} <> 0
@@ -498,9 +665,9 @@ exports.findMatchingMale = async (req, res, next) => {
           female_matching_uthamam.${searchNakshtraColumn} AS uthamam_porutham,
           ${baseFields}
         FROM profiles
-        INNER JOIN female_matching_uthamam ON female_matching_uthamam.nakshatra_no = profiles."nakshatraId"
+        INNER JOIN female_matching_uthamam ON female_matching_uthamam.nakshatra_no = profiles.nakshatraid
         ${whereClause}
-        AND profiles."nakshatraId" IN (
+        AND profiles.nakshatraid IN (
           SELECT nakshatra_no FROM female_matching_uthamam WHERE ${searchNakshtraColumn} <> 0
         )
         ORDER BY profiles.id
@@ -512,7 +679,25 @@ exports.findMatchingMale = async (req, res, next) => {
     logger.info(`With Parameters: ${values}`);
 
     const results = await pool.query(query, values);
-    res.json(results.rows);
+    logger.info(`Results: ${JSON.stringify(results.rows)}`);
+    const filteredResults = results.rows.filter((item) => {
+      if (!item.is_active) return false;
+
+      const male_rasi_lagnam = item.rasi_lagnam || ""; // Replace with actual column name
+      // const femaleD = item.navamsam_lagnam || ""; // Replace with actual column name
+
+      logger.info(`Male Rasi Lagnam: ${male_rasi_lagnam}`);
+      // logger.info(`Male Navasam Lagnam: ${maleNavasamLagnam}`);
+      logger.info(`Female Rasi Lagnam: ${femaleRasiLagnam}`);
+      // logger.info(`Female D: ${femaleD}`);
+
+      check = checkSingleCompatibility(femaleRasiLagnam, male_rasi_lagnam);
+      logger.info(`Compatibility Check: ${check}`);
+      return check;
+    });
+    logger.info(`Filtered Results: ${JSON.stringify(filteredResults)}`);
+
+    res.json(filteredResults);
   } catch (error) {
     logger.error(`Error in findMatchingMale: ${error}`);
     res.status(500).json({ error: "Internal server error" });
@@ -525,13 +710,15 @@ exports.findMatchingMale = async (req, res, next) => {
  * @param {Object} req - Express request object (expects req.query.serial_no)
  * @param {Object} res - Express response object
  */
+
 exports.getMandatoryProfileDetailsFromSerialNo = async (req, res, next) => {
   const serialNo = req.query.serial_no;
 
   if (!serialNo) {
-    return res
-      .status(400)
-      .send({ message: "Missing required parameter: serial_no" });
+    return res.status(400).json({
+      success: false,
+      message: "Missing required parameter: serial_no",
+    });
   }
 
   logger.info(`Fetching mandatory profile details for serial_no: ${serialNo}`);
@@ -540,7 +727,9 @@ exports.getMandatoryProfileDetailsFromSerialNo = async (req, res, next) => {
     SELECT 
       gothram, 
       gender, 
-      "nakshatraId" AS nakshatram 
+      nakshatraid,
+      rasi_lagnam,
+      navamsam_lagnam 
     FROM profiles 
     WHERE serial_no = $1
   `;
@@ -551,14 +740,24 @@ exports.getMandatoryProfileDetailsFromSerialNo = async (req, res, next) => {
 
     if (data.length === 0) {
       logger.info(`No profile found with serial_no: ${serialNo}`);
-      return res.status(404).send({ message: "Profile not found" });
+      return res.status(200).json({
+        success: true,
+        data: [],
+        message: "No profile found",
+      });
     }
 
     logger.info(`Mandatory profile details: ${JSON.stringify(data)}`);
-    res.send(data);
+    return res.status(200).json({
+      success: true,
+      data,
+    });
   } catch (error) {
     logger.error(`Error fetching mandatory profile details: ${error}`);
-    res.status(500).send({ message: "Internal server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
 
@@ -598,11 +797,13 @@ exports.getProfileDetailsFromSerialNo = async (req, res, next) => {
       contact_no,
       gender,
       is_active,
-      "nakshatraId" as nakshatraId,
+      nakshatraid,
       region,
       additional_contact_no,
       qualification_details,
-      is_remarried
+      is_remarried,
+      rasi_lagnam,
+      navamsam_lagnam
     FROM profiles
     WHERE serial_no = $1
   `;
@@ -620,6 +821,100 @@ exports.getProfileDetailsFromSerialNo = async (req, res, next) => {
     res.send(data);
   } catch (error) {
     logger.error(`Error fetching profile details in Controller: ${error}`);
+    res.status(500).send({ message: "Internal server error" });
+  }
+};
+
+/**
+ * Get profile(s) by multiple search criteria.
+ * @route GET /getProfileByDetails
+ * @param {Object} req - Express request object (expects req.query with any of: serial_no, name, gender, birth_date, contact_no)
+ * @param {Object} res - Express response object
+ */
+exports.getProfileByDetails = async (req, res, next) => {
+  try {
+    // Collect possible search fields from query
+    const { serial_no, name, gender, birth_date, contact_no } = req.query;
+
+    // Build dynamic WHERE clause
+    let conditions = [];
+    let values = [];
+    let idx = 1;
+
+    if (serial_no) {
+      conditions.push(`serial_no = $${idx++}`);
+      values.push(serial_no);
+    }
+    if (name) {
+      conditions.push(`LOWER(name) LIKE LOWER($${idx++})`);
+      values.push(`%${name}%`);
+    }
+    if (gender) {
+      conditions.push(`gender = $${idx++}`);
+      values.push(gender);
+    }
+    if (birth_date) {
+      conditions.push(`CAST(birth_date AS DATE) = $${idx++}`);
+      values.push(birth_date);
+    }
+    if (contact_no) {
+      conditions.push(`contact_no = $${idx++}`);
+      values.push(contact_no);
+    }
+
+    if (conditions.length === 0) {
+      return res
+        .status(400)
+        .send({ message: "At least one search parameter is required." });
+    }
+
+    const whereClause = "WHERE " + conditions.join(" AND ");
+
+    const query = `
+      SELECT 
+        id,
+        serial_no,
+        name,
+        CAST(birth_date AS DATE) AS birth_date,
+        father_name,
+        mother_name,
+        siblings,
+        gothram,
+        birth_time,
+        birth_place,
+        qualification,
+        job_details,
+        monthly_income,
+        address,
+        contact_no,
+        gender,
+        is_active,
+        nakshatraid,
+        region,
+        additional_contact_no,
+        qualification_details,
+        is_remarried,
+        rasi_lagnam,
+        navamsam_lagnam
+      FROM profiles
+      ${whereClause}
+    `;
+
+    logger.info(`Profile search query: ${query}`);
+    logger.info(`With values: ${JSON.stringify(values)}`);
+
+    const results = await pool.query(query, values);
+    const data = results.rows;
+
+    if (data.length === 0) {
+      logger.info(`No profiles found for given criteria`);
+      return res.status(404).send({ message: "No profiles found" });
+    }
+
+    logger.info(`Profiles found: ${JSON.stringify(data)}`);
+    res.send(data);
+  } catch (error) {
+    logger.error(`Error fetching profiles by details: ${error}`);
     res.status(500).send({ message: "Internal server error" });
   }
 };
@@ -675,6 +970,9 @@ exports.filter = (req, res) => {
 exports.create = (req, res) => {
   // Create a Tutorial
   logger.info(`remarried ${req.body.is_remarried}`);
+  logger.info(`rasi_lagnam ${req.body.rasi_lagnam}`);
+  logger.info(`navamsam_lagnam ${req.body.navamsam_lagnam}`);
+  logger.info(`nakshatraid ${req.body.nakshatraid}`);
   const profile = {
     serial_no: req.body.serial_no,
     name: req.body.name,
@@ -691,12 +989,14 @@ exports.create = (req, res) => {
     address: req.body.address,
     contact_no: req.body.contact_no,
     gender: req.body.gender,
-    nakshatraId: req.body.nakshatraId,
+    nakshatraid: req.body.nakshatraid,
     region: req.body.region,
     additional_contact_no: req.body.additional_contact_no,
     qualification_details: req.body.qualification_details,
     is_active: true,
     is_remarried: req.body.is_remarried,
+    rasi_lagnam: req.body.rasi_lagnam,
+    navamsam_lagnam: req.body.navamsam_lagnam,
   };
 
   logger.info(`creating profile  ${JSON.stringify(profile)}`);
@@ -718,21 +1018,6 @@ exports.create = (req, res) => {
       });
     });
 };
-
-// /**
-//  * Render the dashboard home page.
-//  * @route GET /
-//  * @param {Object} req - Express request object
-//  * @param {Object} res - Express response object
-//  */
-// exports.getHome = (req, res, next) => {
-//   // const isLoggedIn = req.get('Cookie').trim().split('=')[1]
-//   res.render("dashboard", {
-//     pageTitle: "Dashboard",
-//     path: "/",
-//     activeDashboard: true,
-//   });
-// };
 
 exports.updateProfile = async (req, res) => {
   const serialNumber = req.body.serialNumber;
@@ -756,6 +1041,120 @@ exports.updateProfile = async (req, res) => {
     logger.error("Error fetching data:", error);
     res.render("update-profile", {
       profile: null,
+      searched: true,
+      error: "Internal Server Error",
+    });
+  }
+};
+
+exports.renderSearchProfile = (req, res) => {
+  res.render("search-profile", { profiles : [], searched: false });
+};
+
+// exports.searchProfileByDetails = async (req, res) => {
+//   // Read all search criteria from query parameters
+//   const { serialNumber, name, gender, dob, contactNo } = req.query;
+
+//   // Build a search object
+//   const searchCriteria = {
+//     serial_no: serialNumber,
+//     name,
+//     gender,
+//     birth_date: dob,
+//     contact_no: contactNo
+//   };
+
+//   try {
+//     // Call a service method that accepts multiple criteria
+//     // You need to implement this in your updateProfileService or a new service
+//     const dataRes = await updateProfileService.getProfileByDetails(searchCriteria);
+//     const profile = dataRes[0];
+//     res.render('search-profile', { profile, searched: true });
+//   } catch (error) {
+//     logger.error("Error fetching data:", error);
+//     res.render('search-profile', { profile: null, searched: true, error: 'Internal Server Error' });
+//   }
+// };
+
+exports.searchProfileByDetails = async (req, res) => {
+  const { serialNumber, name, gender, dob, contactNo } = req.query;
+
+  // Build dynamic WHERE clause and values
+  let conditions = [];
+  let values = [];
+  let idx = 1;
+
+  if (serialNumber) {
+    conditions.push(`serial_no = $${idx++}`);
+    values.push(serialNumber);
+  }
+  if (name) {
+    conditions.push(`LOWER(name) LIKE LOWER($${idx++})`);
+    values.push(`%${name}%`);
+  }
+  if (gender) {
+    conditions.push(`gender = $${idx++}`);
+    values.push(gender);
+  }
+  if (dob) {
+    conditions.push(`CAST(birth_date AS DATE) = $${idx++}`);
+    values.push(dob);
+  }
+  if (contactNo) {
+    conditions.push(`contact_no = $${idx++}`);
+    values.push(contactNo);
+  }
+
+  if (conditions.length === 0) {
+    return res.render("search-profile", {
+      profiles: [],
+      searched: true,
+      error: "Please enter at least one search criteria.",
+    });
+  }
+
+  const whereClause = "WHERE " + conditions.join(" AND ");
+  const query = `
+    SELECT 
+      id,
+      serial_no,
+      name,
+      CAST(birth_date AS DATE) AS birth_date,
+      father_name,
+      mother_name,
+      siblings,
+      gothram,
+      birth_time,
+      birth_place,
+      qualification,
+      job_details,
+      monthly_income,
+      address,
+      contact_no,
+      gender,
+      is_active,
+      nakshatraid,
+      region,
+      additional_contact_no,
+      qualification_details,
+      is_remarried,
+      rasi_lagnam,
+      navamsam_lagnam
+    FROM profiles
+    ${whereClause}
+  `;
+
+  try {
+    const results = await pool.query(query, values);
+    // const profile = results.rows[0] || null;
+    res.render("search-profile", {
+      profiles: results.rows || [],
+      searched: true,
+    });
+  } catch (error) {
+    logger.error("Error fetching data:", error);
+    res.render("search-profile", {
+      profiles: [],
       searched: true,
       error: "Internal Server Error",
     });

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const profileController = require("../controller/ProfileController");
 const isAuthenticated = require("../middleware/auth");
 
 router.get("/", isAuthenticated, (req, res) => {
@@ -26,5 +27,8 @@ router.get("/Profile", isAuthenticated, (req, res) => {
 router.get("/ListProfiles", isAuthenticated, (req, res) => {
   res.render("Showallprofile");
 });
+
+router.get('/search-profile', profileController.renderSearchProfile);
+router.get('/searchProfileDetails', profileController.searchProfileByDetails);
 
 module.exports = router;

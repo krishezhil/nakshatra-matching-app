@@ -7,7 +7,10 @@ const logger = require('../utils/logger');
 // /generate-excel route
 router.get('/generate-excel', async (req, res) => {
   try {
-    const profilesData = req.session.profiles;
+    // const profilesData = req.session.profiles;
+    const profilesWrapper = req.session.profiles;
+    const profilesData = profilesWrapper?.data || [];
+
     if (!profilesData || !Array.isArray(profilesData) || profilesData.length === 0) {
       return res.status(400).json({ error: 'No profiles data available for export. Please search and shortlist profiles first.' });
     }
@@ -31,10 +34,14 @@ router.get('/download-pdf/:filename', (req, res) => {
 
 router.get('/generate-pdf', async (req, res) => {
   try {
-    const profilesData = req.session.profiles;
+    const profilesWrapper = req.session.profiles;
+    const profilesData = profilesWrapper?.data || [];
+    const serialNo = profilesWrapper?.serial_no || 'profile';
+    // const profilesData = req.session.profiles;
     const pdfBuffer = await pdfService.generatePDF(profilesData);
+    const filename = `${serialNo}_matching_profiles.pdf`;
 
-    res.setHeader('Content-Disposition', 'attachment; filename=profiles.pdf');
+    res.setHeader(`Content-Disposition', 'attachment; filename=${filename}'`);
     res.setHeader('Content-Type', 'application/pdf');
     res.send(pdfBuffer);
   } catch (err) {
