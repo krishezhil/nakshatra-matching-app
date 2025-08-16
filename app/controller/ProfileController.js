@@ -10,14 +10,16 @@ const updateProfileService = require("../../services/updateProfileService");
 const profileService = require("../../services/filterProfileService");
 
 exports.searchProfile = async (req, res) => {
+  // logger.info("Searching profile by query object:", JSON.stringify(req.query));
+  logger.info(`Searching profile by serial number: ${req.query.serialNumber}`);
   const serialNumber = req.query.serialNumber;
 
-  if (!serialNumber) {
-    return res.render("update-profile", { profile: null, searched: true });
-  }
-
+if (!serialNumber) {
+  return res.render("update-profile", { profile: null, searched: true, serialNumber });
+}
   try {
-    const dataRes = await updateProfileService.getProfileDetails(serialNumber);
+    const dataRes = await updateProfileService.getProfileByDetails({ serial_no: serialNumber });
+    // const dataRes = await exports.getProfileDetailsFromSerialNo(serialNumber);
     const profile = dataRes[0];
 
     if (profile) {
@@ -27,12 +29,37 @@ exports.searchProfile = async (req, res) => {
       res.render("update-profile", { profile: null, searched: true });
     }
   } catch (error) {
-    logger.error("Error fetching data:", error);
+    logger.error("Error fetching data Search Profile Method in ProfileController:", error);
     res.render("update-profile", {
       profile: null,
       searched: true,
       error: "Internal Server Error",
     });
+  }
+};
+
+/**
+ * Get the age of a profile based on serial number.
+ * @route GET /getAge
+ * @param {Object} req - Express request object (expects req.query.serial_no)
+ * @param {Object} res - Express response object
+ */
+exports.getAge = async (req, res) => {
+  try {
+    const serialNo = req.query.serial_no;
+    const query = `SELECT DATE_PART('YEAR', AGE(CURRENT_DATE, birth_date)) AS age FROM profiles WHERE serial_no = $1`;
+    const results = await pool.query(query, [serialNo]);
+    if (results.rows.length > 0) {
+      const age = results.rows[0].age;
+      logger.info(`Age: ${age}`);
+      res.json({ age });
+    } else {
+      logger.info(`No age found for serial number: ${serialNo}`);
+      res.status(404).json({ error: "No age found" });
+    }
+  } catch (error) {
+    logger.error(`Error while fetching age:  ${error}`);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -172,7 +199,7 @@ exports.searchMatchingProfiles = async (req, res) => {
         profiles.length === 0 ? "No matching profiles found" : "Profiles found",
     });
   } catch (error) {
-    logger.error("Error fetching data:", error);
+    logger.error("Error fetching data searchMatchingProfiles Method in ProfileController:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
@@ -188,7 +215,7 @@ exports.renderShortlistedProfiles = (req, res) => {
     logger.info(`First profile in session: ${JSON.stringify(profiles[0])}`);
 
     if (profiles.length > 0) {
-      res.render("shortlistedprofiles", { profiles });
+      res.render("short-listed-profiles", { profiles });
     } else {
       res.render("noDataFound");
     }
@@ -197,23 +224,6 @@ exports.renderShortlistedProfiles = (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
-// exports.renderShortlistedProfiles = (req, res) => {
-//   try {
-//     const profiles = req.session.profiles;
-//     logger.info(`Session data in shortlistedprofiles: ${req.session}`);
-//     logger.info(`Profiles in session: ${JSON.stringify(profiles.data[0])}`);
-
-//     if (profiles && profiles.length > 0) {
-//       res.render("shortlistedprofiles", { profiles });
-//     } else {
-//       res.render("noDataFound");
-//     }
-//   } catch (error) {
-//     logger.error("Error rendering page:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
 
 const nakshatra = Object.freeze({
   1: "one",
@@ -442,7 +452,7 @@ exports.findMatchingFemale = async (req, res, next) => {
     logger.info(`Values:  ${values}`);
 
     const results = await pool.query(finalQuery, values);
-    logger.info(`Results: ${JSON.stringify(results.rows)}`);
+    logger.info(`Raw Female Results: ${JSON.stringify(results.rows)}`);
     const filteredResults = results.rows.filter((item) => {
       if (!item.is_active) return false;
 
@@ -679,7 +689,7 @@ exports.findMatchingMale = async (req, res, next) => {
     logger.info(`With Parameters: ${values}`);
 
     const results = await pool.query(query, values);
-    logger.info(`Results: ${JSON.stringify(results.rows)}`);
+    logger.info(`Raw Male Results: ${JSON.stringify(results.rows)}`);
     const filteredResults = results.rows.filter((item) => {
       if (!item.is_active) return false;
 
@@ -768,7 +778,8 @@ exports.getMandatoryProfileDetailsFromSerialNo = async (req, res, next) => {
  * @param {Object} res - Express response object
  */
 exports.getProfileDetailsFromSerialNo = async (req, res, next) => {
-  const serialNo = req.query.serial_no;
+  console.log("getProfileDetailsFromSerialNo called"+req.query.serialNumber);
+  const serialNo = req.query.serialNumber;
 
   if (!serialNo) {
     return res
@@ -1038,7 +1049,7 @@ exports.updateProfile = async (req, res) => {
       res.render("update-profile", { profile: null, searched: true });
     }
   } catch (error) {
-    logger.error("Error fetching data:", error);
+    logger.error("Error fetching data updateProfile Method :", error);
     res.render("update-profile", {
       profile: null,
       searched: true,
@@ -1152,7 +1163,7 @@ exports.searchProfileByDetails = async (req, res) => {
       searched: true,
     });
   } catch (error) {
-    logger.error("Error fetching data:", error);
+    logger.error("Error fetching data searchProfileByDetails in Profile Controller:", error);
     res.render("search-profile", {
       profiles: [],
       searched: true,

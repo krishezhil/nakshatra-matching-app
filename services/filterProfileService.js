@@ -94,7 +94,7 @@ exports.findMatchingProfiles = async (queryParams, gender) => {
       message: "Profiles fetched successfully",
       data: data || [],
     }
-    logger.info(`Profiles found: ${JSON.stringify(profiles)}`);
+    logger.info(`Filter Profiles found: ${JSON.stringify(profiles)}`);
     return profiles;
   } catch (error) {
     logger.error(`Error finding matching profiles: ${error}`);

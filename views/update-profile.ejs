@@ -18,7 +18,7 @@
           <h3>Update Profile</h3>
           <small class="text-muted">Update profile details</small>
         </div>
-        <form id="searchProfileForm" action="/api/searchProfile" method="GET" onsubmit="return validateForm()">
+        <form id="searchProfileForm" action="/api/searchProfile" method="GET">
           <div class="form-row">
             <div class="form-group col-md-4">
               <label for="serialNumber">Serial Number</label>
@@ -40,10 +40,18 @@
 
         </form>
 
+        <!-- <form id="searchProfileForm" action="/api/searchProfile" method="GET">
+  <label for="serialNumber">Serial Number:</label>
+  <input 
+    type="text" 
+    id="serialNumber" 
+    name="serialNumber" 
+    value="<%= typeof serialNumber !== 'undefined' ? serialNumber : '' %>">
+  <button type="submit">Search</button>
+</form> -->
         <% if (profile) { %>
           <div id="updateFormContainer"> <!-- Add ID to the form container -->
-            <form id="updateForm" action="/api/update-profile/<%= profile.id %>" method="POST"
-              onsubmit="return validateUpdateForm()">
+            <form id="updateForm" action="/api/update-profile/<%= profile.id %>" method="POST">
               <div class="form-row">
                 <div class="form-group col-md-4">
                   <label for="name">Name</label>
@@ -178,19 +186,19 @@
                     </option>
                     <option value="Sani" <% if(profile.rasi_lagnam==='Sani' ) { %> selected <% } %>>Sani
                     </option>
-                    <option value="Sevaai" <% if(profile.rasi_lagnam==='Sevaai' ) { %> selected <% } %>>Sevaai</option>
+                    <option value="Sevai" <% if(profile.rasi_lagnam==='Sevai' ) { %> selected <% } %>>Sevai</option>
                     <option value="Raaghu/Kethu" <% if(profile.rasi_lagnam==='Raaghu/Kethu' ) { %> selected <% } %>
                         >Raaghu/Kethu</option>
-                    <option value="Sani/Sevaai" <% if(profile.rasi_lagnam==='Sani/Sevaai' ) { %> selected <% } %>
-                        >Sani/Sevaai</option>
+                    <option value="Sani/Sevai" <% if(profile.rasi_lagnam==='Sani/Sevai' ) { %> selected <% } %>
+                        >Sani/Sevai</option>
                     <option value="Sani/Kethu/Raaghu" <% if(profile.rasi_lagnam==='Sani/Kethu/Raaghu' ) { %> selected <%
                         } %>>Sani/Kethu/Raaghu
                     </option>
-                    <option value="Sevaai/Kethu/Raaghu" <% if(profile.rasi_lagnam==='Sevaai/Kethu/Raaghu' ) { %>
-                      selected <% } %>>Sevaai/Kethu/Raaghu
+                    <option value="Sevai/Kethu/Raaghu" <% if(profile.rasi_lagnam==='Sevai/Kethu/Raaghu' ) { %>
+                      selected <% } %>>Sevai/Kethu/Raaghu
                     </option>
-                    <option value="Sani/Sevaai/Kethu/Raaghu" <% if(profile.rasi_lagnam==='Sani/Sevaai/Kethu/Raaghu' ) {
-                      %> selected <% } %>>Sani/Sevaai/Kethu/Raaghu
+                    <option value="Sani/Sevai/Kethu/Raaghu" <% if(profile.rasi_lagnam==='Sani/Sevai/Kethu/Raaghu' ) { %>
+                      selected <% } %>>Sani/Sevai/Kethu/Raaghu
                     </option>
                   </select>
                 </div>
@@ -237,7 +245,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="/js/scripts.js"></script>
-  <script>
+  <!-- <script>
+    function validateForm() {
+      const serialNumber = document.getElementById('serialNumber').value;
+      if (serialNumber.trim() === '') {
+        alert('Please enter Serial Number.');
+        return false;
+      }
+      return true;
+    }
     document.addEventListener('DOMContentLoaded', function () {
       const isActiveToggle = document.getElementById('isActiveToggle');
       const isActiveHidden = document.getElementById('isActiveHidden');
@@ -255,14 +271,7 @@
       const birthDateHidden = document.getElementById('birthDateHidden');
       let initialBirthDateValue = birthDateInput.value;
 
-      function validateForm() {
-        const serialNumber = document.getElementById('serialNumber').value;
-        if (serialNumber.trim() === '') {
-          alert('Please enter Serial Number.');
-          return false;
-        }
-        return true;
-      }
+
 
       function validateUpdateForm() {
         const name = document.getElementById('name').value;
@@ -318,6 +327,95 @@
           });
         })
         .catch(error => console.error('Error fetching:', error));
+    });
+  </script> -->
+  <script>
+    // Validation for Search Form
+    function validateSearchForm(e) {
+      const serialNumber = document.getElementById('serialNumber').value;
+      if (serialNumber.trim() === '') {
+        e.preventDefault();
+        alert('Please enter Serial Number.');
+        return false;
+      }
+      return true;
+    }
+
+    // Validation for Update Form
+    function validateUpdateForm(e) {
+      const name = document.getElementById('name').value.trim();
+      const gender = document.getElementById('gender').value.trim();
+      const region = document.getElementById('region').value.trim();
+
+      if (!name) {
+        e.preventDefault();
+        alert('Please enter Name.');
+        return false;
+      }
+      if (!gender) {
+        e.preventDefault();
+        alert('Please select Gender.');
+        return false;
+      }
+      if (!region) {
+        e.preventDefault();
+        alert('Please select Region.');
+        return false;
+      }
+
+      // Add other field checks here if needed
+      return true;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // ===== SEARCH FORM =====
+      const searchForm = document.getElementById('searchProfileForm');
+      if (searchForm) {
+        searchForm.addEventListener('submit', validateSearchForm);
+      }
+
+      // ===== UPDATE FORM =====
+      const updateForm = document.getElementById('updateForm');
+      if (updateForm) {
+        updateForm.addEventListener('submit', validateUpdateForm);
+      }
+
+      // ===== TOGGLE SWITCHES =====
+      const isActiveToggle = document.getElementById('isActiveToggle');
+      const isActiveHidden = document.getElementById('isActiveHidden');
+      if (isActiveToggle && isActiveHidden) {
+        isActiveToggle.addEventListener('change', function () {
+          isActiveHidden.value = this.checked ? 'true' : 'false';
+        });
+      }
+
+      const isRemarriedToggle = document.getElementById('isRemarriedToggle');
+      const isRemarriedHidden = document.getElementById('isRemarriedHidden');
+      if (isRemarriedToggle && isRemarriedHidden) {
+        isRemarriedToggle.addEventListener('change', function () {
+          isRemarriedHidden.value = this.checked ? 'true' : 'false';
+        });
+      }
+
+      // ===== NAKSHATRA DROPDOWN =====
+      const profileNakshatraId = '<%= profile && profile.nakshatraid ? profile.nakshatraid : "" %>';
+      const nakshatraSelect = document.getElementById('nakshatraId');
+      if (nakshatraSelect) {
+        fetch('/dropdown')
+          .then(response => response.json())
+          .then(options => {
+            options.forEach(option => {
+              const optionElement = document.createElement('option');
+              optionElement.value = option.id;
+              optionElement.text = option.name;
+              if (option.id.toString().trim() === profileNakshatraId.trim()) {
+                optionElement.selected = true;
+              }
+              nakshatraSelect.add(optionElement);
+            });
+          })
+          .catch(error => console.error('Error fetching nakshatra list:', error));
+      }
     });
   </script>
 

@@ -190,12 +190,12 @@
                                 <select class="form-control" id="rasiLagnam" name="rasiLagnam" required>
                                     <option>Suth</option>
                                     <option>Sani</option>
-                                    <option>Sevaai</option>
+                                    <option>Sevai</option>
                                     <option>Raaghu/Kethu</option>
-                                    <option>Sani/Sevaai</option>
+                                    <option>Sani/Sevai</option>
                                     <option>Sani/Kethu/Raaghu</option>
-                                    <option>Sevaai/Kethu/Raaghu</option>
-                                    <option>Sani/Sevaai/Kethu/Raaghu</option>
+                                    <option>Sevai/Kethu/Raaghu</option>
+                                    <option>Sani/Sevai/Kethu/Raaghu</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-2">
@@ -217,12 +217,12 @@
                                 <select class="form-control" id="navamsamLagnam" name="navamsamLagnam" required>
                                     <option>Suth</option>
                                     <option>Sani</option>
-                                    <option>Sevaai</option>
+                                    <option>Sevai</option>
                                     <option>Raaghu/Kethu</option>
-                                    <option>Sani/Sevaai</option>
+                                    <option>Sani/Sevai</option>
                                     <option>Sani/Kethu/Raaghu</option>
-                                    <option>Sevaai/Kethu/Raaghu</option>
-                                    <option>Sani/Sevaai/Kethu/Raaghu</option>
+                                    <option>Sevai/Kethu/Raaghu</option>
+                                    <option>Sani/Sevai/Kethu/Raaghu</option>
                                 </select>
                             </div>
                         </div> -->
@@ -314,12 +314,12 @@
                 console.log("Data formeed" + JSON.stringify(formData));
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:3000/api/profile', // Replace with your API endpoint
+                    url: 'http://localhost:3000/api/Create-profile', // Replace with your API endpoint
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
                     success: function (response) {
                         alert('Profile created successfully');
-                        window.location.href = '/Matrimony';
+                        window.location.href = '/Find-Matching';
                         // Optionally, redirect to a new page or perform other actions
                     },
                     error: function (error) {

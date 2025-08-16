@@ -3,44 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - கந்தன் சேவா சங்கம்</title>
+    <title>கந்தகோட்டம் சேவா சங்கம்</title>
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="/css/styles.css" />
     <script src="js/scripts.js"></script>
-    <!-- <style>
-    body {
-      background-image: url('img/background-image.jpg'); /* Replace 'background-image.jpg' with your actual image path */
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .login-container {
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
-    .login-container h2 {
-      margin-bottom: 30px;
-      color: #333;
-    }
-  </style> -->
   </head>
-  <body class="login-body">
-    <div class="container mt-5">
+  <body class="login-body d-flex flex-column min-vh-100">
+
+    <!-- Main content -->
+    <div class="container my-auto">
       <div class="row justify-content-center">
         <div class="col-md-6">
           <div class="card">
             <div class="card-header bg-warning text-center">
-              <h4>கந்தன் சேவா சங்கம்</h4>
+              <img src="/img/KandhaLogo.png" style="height:5%;width: 5%;" alt="Logo" />
+              <span class="ml-2">கந்தகோட்டம் சேவா சங்கம்</span>
             </div>
             <div class="card-body">
               <form id="loginForm">
@@ -75,7 +55,7 @@
                 </button>
               </form>
             </div>
-            <div class="card-footer bg-danger text-center">
+            <div class="card-footer bg-danger text-center" id="errorFooter" style="display:none;">
               <p class="text-light" id="lblErrMsg"></p>
             </div>
           </div>
@@ -83,52 +63,12 @@
       </div>
     </div>
 
-    <!-- <script>
-  document.addEventListener('DOMContentLoaded', function() {
-  const loginForm = document.getElementById('loginForm');
-  
-  loginForm.addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    <!-- Full-width footer -->
+    <footer class="bg-danger text-white text-center py-3 mt-auto w-100" style="left:0; right:0;">
+      <div class="container-fluid px-0">
+        <p>&copy; 2025 கந்தகோட்டம் சேவா சங்கம், நெ. 12, பிள்ளையார் கோயில் தெரு, பார்க் டவுன், சென்னை - 600003</p>
+      </div>
+    </footer>
 
-    if (!username || !password) {
-      displayError('Please enter your username and password.');
-      return;
-    }
-    
-    fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Invalid credentials');
-      }
-    })
-    .then(data => {
-      window.location.href = '/Matrimony'; // Redirect to dashboard page on successful login
-    })
-    .catch(error => {
-      displayError(error.message);
-    });
-  });
-
-  function displayError(message) {
-    const errorDivs = document.querySelectorAll('.invalid-feedback');
-    errorDivs.forEach(div => {
-      var messageParagraph = document.getElementById("lblErrMsg");
-      messageParagraph.textContent = message +" Please try again !";
-    });
-  }
-});
-
-</script> -->
   </body>
 </html>

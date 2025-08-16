@@ -6,7 +6,7 @@ const isAuthenticated = require("../middleware/auth"); // Import the authenticat
 const router = express.Router();
 
 router.get("/profile", profileController.findAll);
-router.post("/profile", profileController.create);
+router.post("/Create-profile", profileController.create);
 router.get("/findMatchingMale", profileController.findMatchingMale);
 router.get("/findMatchingFemale", profileController.findMatchingFemale);
 router.get(
@@ -18,6 +18,9 @@ router.get(
   profileController.getProfileDetailsFromSerialNo
 );
 
+router.get("/getProfileByDetails", profileController.getProfileByDetails);
+
+// router.get("/api/searchProfile", profileController.searchProfile);
 router.get("/searchProfile", profileController.searchProfile);
 router.post("/update-profile/:id", profileController.updateProfileById);
 router.post(

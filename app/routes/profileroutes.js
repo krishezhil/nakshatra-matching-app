@@ -8,7 +8,7 @@ router.get("/", isAuthenticated, (req, res) => {
   // res.render('Matrimony');
   // If you want to serve a static HTML file:
   // res.sendFile(path.join(__dirname, '../../public/Matrimony.html'));
-  res.render("Matrimony");
+  res.render("find-matching");
 });
 
 // Render update-profile page (no profile loaded)
@@ -16,12 +16,12 @@ router.get("/update-profile", (req, res) => {
   res.render("update-profile", { profile: null, searched: false });
 });
 
-router.get("/Matrimony", isAuthenticated, (req, res) => {
-  res.render("Matrimony");
+router.get("/Find-Matching", isAuthenticated, (req, res) => {
+  res.render("find-matching");
 });
 
-router.get("/Profile", isAuthenticated, (req, res) => {
-  res.render("Profile");
+router.get("/Create-Profile", isAuthenticated, (req, res) => {
+  res.render("create-profile");
 });
 
 router.get("/ListProfiles", isAuthenticated, (req, res) => {
@@ -30,5 +30,6 @@ router.get("/ListProfiles", isAuthenticated, (req, res) => {
 
 router.get('/search-profile', profileController.renderSearchProfile);
 router.get('/searchProfileDetails', profileController.searchProfileByDetails);
+router.get('/getAge', profileController.getAge);
 
 module.exports = router;

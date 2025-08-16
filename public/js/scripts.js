@@ -75,7 +75,7 @@ function bindSerialNoTabEvent() {
       serial_no: formDataObject.inputSerialNo,
     }).toString();
 
-    disableFields(["inputGender", "inputGothiram", "nakshatraid", "inputage"]);
+    disableFields(["inputGender", "inputGothiram", "nakshatraid", "inputage", "rasi_lagnam"]);
 
     fetch(`api/getSearchDetails?${params}`)
       .then((response) => response.json())
@@ -91,7 +91,9 @@ function bindSerialNoTabEvent() {
           return;
         }
 
-        const { gender, gothram, nakshatraid } = dataRes.data[0];
+        console.log("Search Input Serial Output Data ",JSON.stringify(dataRes.data[0]));
+
+        const { gender, gothram, nakshatraid,rasi_lagnam } = dataRes.data[0];
 
         console.log("Auto-filled:", gender, gothram, nakshatraid);
 
@@ -99,11 +101,12 @@ function bindSerialNoTabEvent() {
           inputGender: gender,
           inputGothiram: gothram,
           nakshatraid: nakshatraid,
+          rasi_lagnam: rasi_lagnam,
         });
         document.getElementById("nakshatraidHidden").value = nakshatraid;
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data in scripts:", error);
         alert("Error fetching data. Please try again later.");
       });
   });
@@ -126,7 +129,7 @@ function bindSubmitButton() {
 
   submitButton.addEventListener("click", function (event) {
     event.preventDefault();
-    console.log("Submit button clicked");
+    console.log("Search Matching Profile button clicked");
     const formDataObject = getFormDataAsObject(form);
     console.log("Form Data Object:", JSON.stringify(formDataObject, null, 2));
 
@@ -185,118 +188,7 @@ function bindSubmitButton() {
       });
   });
 
-  // submitButton.addEventListener("click", function (event) {
-  //   event.preventDefault();
-
-  //   const formDataObject = getFormDataAsObject(form);
-  //   console.log("Form Data Object:", JSON.stringify(formDataObject, null, 2));
-
-  //   if (!validateFormData(formDataObject)) return;
-
-  //   const params = new URLSearchParams(formDataObject).toString();
-
-  //   fetch(`/api/searchMatchingProfiles?${params}`, {
-  //     method: "GET",
-  //     headers: { "Content-Type": "application/json" },
-  //   })
-  //     .then(async (response) => {
-  //       const contentType = response.headers.get("content-type") || "";
-
-  //       if (!response.ok) {
-  //         const errorMsg = contentType.includes("application/json")
-  //           ? (await response.json()).message
-  //           : await response.text();
-
-  //         throw new Error(errorMsg || "Unknown error occurred");
-  //       }
-
-  //       return response.json();
-  //     })
-  //     .then((responseData) => {
-  //       console.log("Response from API:", responseData);
-
-  //       if (!responseData.success || responseData.data.length === 0) {
-
-  //         alert("Response:\n" + JSON.stringify(responseData, null, 2));
-  //         alert("No matching profiles fnd.");
-  //         return;
-  //       }
-  //       // Success
-  //       window.location.href = "/api/shortlistedprofiles";
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error submitting form:", error);
-  //       alert(`Error: ${error.message}`);
-  //     });
-  // });
 }
-
-// function bindSubmitButton() {
-//   const submitButton = document.getElementById("submitButton");
-//   const form = document.getElementById("myForm");
-
-//   if (!submitButton || !form) return;
-
-//   submitButton.addEventListener("click", function (event) {
-//     event.preventDefault();
-
-//     const formDataObject = getFormDataAsObject(form);
-//     console.log("Form Data Object:", JSON.stringify(formDataObject, null, 2));
-
-//     if (!validateFormData(formDataObject)) return;
-
-//     const params = new URLSearchParams(formDataObject).toString();
-
-//     fetch(`/api/searchMatchingProfiles?${params}`, {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     })
-//       .then((response) => response.json())
-//       .then((dataRes) => {
-//         if (dataRes.success && Array.isArray(dataRes.data)) {
-//           if (dataRes.data.length === 0) {
-//             alert("No matching profiles found. Please refine your search.");
-//           } else {
-//             window.location.href = "/api/shortlistedprofiles";
-//           }
-//         } else {
-//           alert("Something went wrong. Please try again later.");
-//         }
-//       })
-//       .catch((error) => {
-//         console.error("Error submitting form:", error);
-//         alert("Server error occurred. Please try again.");
-//       });
-//   });
-// }
-
-// function bindSubmitButton() {
-//   const submitButton = document.getElementById("submitButton");
-//   const form = document.getElementById("myForm");
-
-//   if (!submitButton || !form) return;
-
-//   submitButton.addEventListener("click", function (event) {
-//     event.preventDefault();
-
-//     const formDataObject = getFormDataAsObject(form);
-//     console.log("Form Data Object:", JSON.stringify(formDataObject, null, 2));
-
-//     if (!validateFormData(formDataObject)) return;
-//     // Convert formDataObject to query string
-//     const params = new URLSearchParams(formDataObject).toString();
-
-//     fetch(`/api/searchMatchingProfiles?${params}`, {
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     })
-//       .then((response) => response.json())
-//       .then(() => {
-//         window.location.href = "/api/shortlistedprofiles";
-//       })
-//       .catch((error) => console.error("Error submitting form:", error));
-//   });
-// }
 
 // Utility: Convert FormData to JS object
 function getFormDataAsObject(form) {
@@ -331,6 +223,7 @@ function assignValues(fieldMap) {
 
 // Utility: Validate mandatory fields
 function validateFormData(data) {
+  // console.log("Incoming Form Data ", JSON.stringify(data));
   if (!data.inputGender && !document.getElementById("inputGender").disabled) {
     alert("Gender field is required");
     return false;
@@ -344,6 +237,16 @@ function validateFormData(data) {
   }
   if (!data.nakshatraid && !document.getElementById("nakshatraid").disabled) {
     alert("Natchathiram field is required");
+    return false;
+  }
+    if (!data.inputage && !document.getElementById("inputage").disabled) {
+    alert("Age field is required");
+    // console.log("rasi_lagnam in data:", data.rasi_lagnam, "disabled:", document.getElementById("rasi_lagnam").disabled);
+    return false;
+  }
+  // console.log("rasi_lagnam in data:", data.rasi_lagnam, "disabled:", document.getElementById("rasi_lagnam").disabled);
+    if (!data.rasi_lagnam && !document.getElementById("rasi_lagnam").disabled) {
+    alert("Rasi(Lagnam) field is required");
     return false;
   }
   return true;
@@ -384,7 +287,7 @@ function bindLoginForm() {
         }
       })
       .then(() => {
-        window.location.href = "/Matrimony"; // Redirect on success
+        window.location.href = "/Find-Matching"; // Redirect on success
       })
       .catch((error) => {
         displayLoginError(error.message);
@@ -393,8 +296,13 @@ function bindLoginForm() {
 }
 
 function displayLoginError(message) {
+  var errorFooter = document.getElementById("errorFooter");
   const messageParagraph = document.getElementById("lblErrMsg");
   if (messageParagraph) {
     messageParagraph.textContent = message + " Please try again!";
+    errorFooter.style.display = "block";
+  }else{
+    messageParagraph.textContent = "";
+    errorFooter.style.display = "none";
   }
 }

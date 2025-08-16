@@ -4,7 +4,7 @@ const profileController = require('../controller/ProfileController')
 const router = express.Router()
 
 router.get('/profile', profileController.findAll)
-router.post('/profile', profileController.create)
+router.post('/Create-profile', profileController.create)
 router.post('/findMatchingMale', profileController.findMatchingMale)
 router.get('/findMatchingFemale', profileController.findMatchingFemale)
 

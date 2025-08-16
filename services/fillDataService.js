@@ -17,7 +17,7 @@ exports.fetchProfileData = async (serialNo) => {
     const responseSearch = await fetch(url);
 
     if (!responseSearch.ok) {
-      throw new Error(`Error fetching data: ${responseSearch.statusText}`);
+      throw new Error(`Error fetching data fillData Service: ${responseSearch.statusText}`);
     }
 
     const dataRes = await responseSearch.json();
